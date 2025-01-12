@@ -81,6 +81,86 @@ client.once('ready', () => {
 
 login();
 
+const { Client, GatewayIntentBits, Partials } = require('discord.js');
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent
+  ],
+  partials: [Partials.Message, Partials.Channel, Partials.Reaction]
+});
+
+const prefix = '!'; // Prefix for bot commands
+
+client.once('ready', () => {
+  console.log(`[ BOT ] Logged in as ${client.user.tag}`);
+  client.user.setActivity('Managing Servers', { type: 'WATCHING' });
+});
+
+// Command Handler
+client.on('messageCreate', async (message) => {
+  if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+  const args = message.content.slice(prefix.length).trim().split(/ +/);
+  const command = args.shift().toLowerCase();
+
+  // Ping Command
+  if (command === 'ping') {
+    return message.reply(`🏓 Pong! Latency is ${Date.now() - message.createdTimestamp}ms.`);
+  }
+
+  // Kick Command
+  if (command === 'kick') {
+    if (!message.member.permissions.has('KickMembers')) {
+      return message.reply('❌ You do not have permission to kick members!');
+    }
+    const member = message.mentions.members.first();
+    if (!member) {
+      return message.reply('❌ Please mention a valid member to kick.');
+    }
+    try {
+      await member.kick();
+      message.reply(`✅ Successfully kicked ${member.user.tag}`);
+    } catch (err) {
+      message.reply('❌ Unable to kick the member. Do I have the proper permissions?');
+    }
+  }
+
+  // Ban Command
+  if (command === 'ban') {
+    if (!message.member.permissions.has('BanMembers')) {
+      return message.reply('❌ You do not have permission to ban members!');
+    }
+    const member = message.mentions.members.first();
+    if (!member) {
+      return message.reply('❌ Please mention a valid member to ban.');
+    }
+    try {
+      await member.ban();
+      message.reply(`✅ Successfully banned ${member.user.tag}`);
+    } catch (err) {
+      message.reply('❌ Unable to ban the member. Do I have the proper permissions?');
+    }
+  }
+
+  // Help Command
+  if (command === 'help') {
+    return message.reply(`
+📜 **Commands List**:
+- \`!ping\` - Check bot's latency.
+- \`!kick @user\` - Kick a user.
+- \`!ban @user\` - Ban a user.
+- \`!help\` - Show this help message.
+    `);
+  }
+});
+
+// Handle Errors
+client.on('error', (err) => console.error('[ ERROR ]', err));
+client.on('shardError', (error) => console.error('A websocket connection encountered an error:', error));
+
   
 /*
 
