@@ -81,32 +81,6 @@ client.once('ready', () => {
 
 login();
 
-const { Client, GatewayIntentBits, Partials } = require('discord.js');
-const client = new Client({
-  intents: [
-    GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMembers,
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent
-  ],
-  partials: [Partials.Message, Partials.Channel, Partials.Reaction]
-});
-
-const prefix = '!'; // Prefix for bot commands
-
-client.once('ready', () => {
-  console.log(`[ BOT ] Logged in as ${client.user.tag}`);
-  client.user.setActivity('Managing Servers', { type: 'WATCHING' });
-});
-
-// Command Handler
-client.on('messageCreate', async (message) => {
-  if (!message.content.startsWith(prefix) || message.author.bot) return;
-
-  const args = message.content.slice(prefix.length).trim().split(/ +/);
-  const command = args.shift().toLowerCase();
-
- 
 
   
 /*
