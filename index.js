@@ -106,60 +106,7 @@ client.on('messageCreate', async (message) => {
   const args = message.content.slice(prefix.length).trim().split(/ +/);
   const command = args.shift().toLowerCase();
 
-  // Ping Command
-  if (command === 'ping') {
-    return message.reply(`🏓 Pong! Latency is ${Date.now() - message.createdTimestamp}ms.`);
-  }
-
-  // Kick Command
-  if (command === 'kick') {
-    if (!message.member.permissions.has('KickMembers')) {
-      return message.reply('❌ You do not have permission to kick members!');
-    }
-    const member = message.mentions.members.first();
-    if (!member) {
-      return message.reply('❌ Please mention a valid member to kick.');
-    }
-    try {
-      await member.kick();
-      message.reply(`✅ Successfully kicked ${member.user.tag}`);
-    } catch (err) {
-      message.reply('❌ Unable to kick the member. Do I have the proper permissions?');
-    }
-  }
-
-  // Ban Command
-  if (command === 'ban') {
-    if (!message.member.permissions.has('BanMembers')) {
-      return message.reply('❌ You do not have permission to ban members!');
-    }
-    const member = message.mentions.members.first();
-    if (!member) {
-      return message.reply('❌ Please mention a valid member to ban.');
-    }
-    try {
-      await member.ban();
-      message.reply(`✅ Successfully banned ${member.user.tag}`);
-    } catch (err) {
-      message.reply('❌ Unable to ban the member. Do I have the proper permissions?');
-    }
-  }
-
-  // Help Command
-  if (command === 'help') {
-    return message.reply(`
-📜 **Commands List**:
-- \`!ping\` - Check bot's latency.
-- \`!kick @user\` - Kick a user.
-- \`!ban @user\` - Ban a user.
-- \`!help\` - Show this help message.
-    `);
-  }
-});
-
-// Handle Errors
-client.on('error', (err) => console.error('[ ERROR ]', err));
-client.on('shardError', (error) => console.error('A websocket connection encountered an error:', error));
+ 
 
   
 /*
